@@ -47,12 +47,12 @@ a {
   left: 0;
   z-index: 100;
   display: flex;
-  flex-direction: row-reverse; /* RTL: logo on right, whatsapp on left */
+  flex-direction: row; /* dir=rtl already flows right→left, row puts logo (first child) on the right */
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
   height: 64px;
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(0, 0, 0, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   gap: 1rem;
@@ -128,8 +128,9 @@ a {
 /* ─── HERO ─── */
 .hero {
   position: relative;
-  height: 100svh;
-  min-height: 600px;
+  margin-top: 64px;
+  height: calc(100svh - 64px);
+  min-height: 540px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -166,7 +167,6 @@ a {
   padding: 0 1.5rem;
   max-width: 700px;
   width: 100%;
-  margin-top: 64px;
 }
 
 .hero-badge {
@@ -1606,6 +1606,52 @@ h2.section-title {
 
 /* ─── FLOATING WHATSAPP (hidden - moved to nav) ─── */
 
+/* ─── NAV LEFT GROUP (WhatsApp + Hamburger) ─── */
+.top-nav-left-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Hamburger button — hidden on desktop */
+.top-nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.top-nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* Animated X when open */
+.top-nav-hamburger span:nth-child(1).open {
+  transform: translateY(7px) rotate(45deg);
+}
+.top-nav-hamburger span:nth-child(2).open {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.top-nav-hamburger span:nth-child(3).open {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ─── DIVIDER ─── */
 .divider {
   width: 50px;
@@ -1641,8 +1687,46 @@ h2.section-title {
 }
 
 @media (max-width: 700px) {
+  /* Show hamburger, hide desktop links */
+  .top-nav-hamburger {
+    display: flex;
+  }
+
   .top-nav-links {
     display: none;
+    position: fixed;
+    inset: 64px 0 0 0;
+    background: rgba(0, 0, 0, 0.97);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    z-index: 99;
+    padding: 2rem 0;
+  }
+
+  .top-nav-links.mobile-open {
+    display: flex;
+  }
+
+  .top-nav-links a {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    letter-spacing: 0.05em;
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .top-nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .top-nav-links a:hover {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.04);
   }
 }
 
@@ -1656,7 +1740,7 @@ h2.section-title {
   }
 
   .hero h1 {
-    font-size: clamp(2.5rem, 15vw, 4rem);
+    font-size: clamp(2rem, 13vw, 4rem);
   }
 
   .section,
@@ -1672,5 +1756,45 @@ h2.section-title {
   .contact-cta {
     align-items: center;
     text-align: center;
+  }
+
+  .stats-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stat-item:last-child {
+    border-bottom: none;
+  }
+
+  .app-section-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .article-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .article-sidebar {
+    position: static;
+    order: -1;
+  }
+
+  .article-toc {
+    display: none;
+  }
+
+  .article-related-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,10 +1,12 @@
+const articleImage = (filename) => `${import.meta.env.BASE_URL}images/article/${filename}`
+
 export const articles = [
   {
     id: 'strength-training-women-men',
     title: 'אימוני כוח לנשים וגברים – מה ההבדל ולמה זה חשוב?',
     category: 'אימון',
     date: 'אפריל 2025',
-    image: '/images/article/alora-griffiths-LOnMc8Rp1Qs-unsplash.jpg',
+    image: articleImage('alora-griffiths-LOnMc8Rp1Qs-unsplash.jpg'),
     excerpt: 'אימון כוח הוא אחד הכלים הטובים ביותר לשינוי גוף – לנשים ולגברים כאחד. אבל יש הבדלים חשובים שכדאי להכיר.',
     toc: [
       { id: 'intro', label: 'מבוא' },
@@ -49,7 +51,7 @@ export const articles = [
     title: 'סקוואט נכון – המדריך המלא לטכניקה מושלמת',
     category: 'טכניקה',
     date: 'אפריל 2025',
-    image: '/images/article/benjamin-klaver-zAtTuN6Ykok-unsplash.jpg',
+    image: articleImage('benjamin-klaver-zAtTuN6Ykok-unsplash.jpg'),
     excerpt: 'הסקוואט הוא המלך של תרגילי הרגליים. כשעושים אותו נכון – הוא בונה כוח, מעצב את הגוף ומונע פציעות.',
     toc: [
       { id: 'why', label: 'למה ללמוד סקוואט?' },
@@ -113,7 +115,7 @@ export const articles = [
     title: 'איך מתחילים להתאמן – מדריך למתחיל/ה',
     category: 'מתחילים',
     date: 'מרץ 2025',
-    image: '/images/article/bruce-mars-jY-GlbKeTDs-unsplash.jpg',
+    image: articleImage('bruce-mars-jY-GlbKeTDs-unsplash.jpg'),
     excerpt: 'כל מסע מתחיל בצעד אחד. אם אתה/את חושב/ת להתחיל להתאמן – המאמר הזה בשבילך.',
     toc: [
       { id: 'start', label: 'איפה מתחילים?' },
@@ -168,7 +170,7 @@ export const articles = [
     title: 'אימון בבית עם דמבלים – 5 תרגילים שחייבים להכיר',
     category: 'אימון בבית',
     date: 'מרץ 2025',
-    image: '/images/article/derick-mckinney-__QqvTI5Edc-unsplash.jpg',
+    image: articleImage('derick-mckinney-__QqvTI5Edc-unsplash.jpg'),
     excerpt: 'לא צריך חדר כושר כדי להתאמן ברצינות. עם זוג דמבלים ותוכנית נכונה – אפשר לעשות הכל מהבית.',
     toc: [
       { id: 'why-dumbbells', label: 'למה דמבלים?' },
@@ -228,7 +230,7 @@ export const articles = [
     title: 'תזונה נכונה לאנשים שמתאמנים – מה לאכול ומתי',
     category: 'תזונה',
     date: 'פברואר 2025',
-    image: '/images/article/look-studio-c7FiE8onC1I-unsplash.jpg',
+    image: articleImage('look-studio-c7FiE8onC1I-unsplash.jpg'),
     excerpt: 'אימון בלי תזונה נכונה הוא כמו מכונית בלי דלק. כל מה שצריך לדעת על אכילה שתומכת בתוצאות.',
     toc: [
       { id: 'basics', label: 'הבסיס' },
@@ -280,7 +282,7 @@ export const articles = [
     title: 'שייקים חלבוניים – מתי שותים, כמה ומה חשוב להכיר',
     category: 'תזונה',
     date: 'פברואר 2025',
-    image: '/images/article/lyfefuel-4wtxPhvQZds-unsplash.jpg',
+    image: articleImage('lyfefuel-4wtxPhvQZds-unsplash.jpg'),
     excerpt: 'חלבון הוא אבן הבניין של השריר. אבל האם שייק חלבון באמת הכרחי? וכשכן – מה הכי כדאי לשתות?',
     toc: [
       { id: 'necessary', label: 'האם זה הכרחי?' },
@@ -331,7 +333,7 @@ export const articles = [
     title: 'להתאמן עם בן/בת הזוג – יתרונות, אתגרים וטיפים',
     category: 'אורח חיים',
     date: 'ינואר 2025',
-    image: '/images/article/lyfefuel-Kib8ccOF1wQ-unsplash.jpg',
+    image: articleImage('lyfefuel-Kib8ccOF1wQ-unsplash.jpg'),
     excerpt: 'התאמנות משותפת יכולה לחזק את הקשר ואת הגוף בו זמנית – אם יודעים איך לעשות את זה נכון.',
     toc: [
       { id: 'benefits', label: 'היתרונות' },
