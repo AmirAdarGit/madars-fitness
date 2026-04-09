@@ -170,13 +170,13 @@ function HomePage() {
           <span className="top-nav-logo-text" style={{ display: 'none' }}>MADARS FITNESS</span>
         </a>
 
-        {/* Links - CENTER (desktop) */}
-        <div className={`top-nav-links ${menuOpen ? 'mobile-open' : ''}`}>
-          <a href="#about" onClick={() => setMenuOpen(false)}>אודות</a>
-          <a href="#services" onClick={() => setMenuOpen(false)}>שירותים</a>
-          <a href="#testimonials" onClick={() => setMenuOpen(false)}>המלצות</a>
-          <Link to="/articles" onClick={() => setMenuOpen(false)}>בלוג</Link>
-          <a href="#contact" onClick={() => setMenuOpen(false)}>יצירת קשר</a>
+        {/* Links - CENTER (desktop only) */}
+        <div className="top-nav-links">
+          <a href="#about">אודות</a>
+          <a href="#services">שירותים</a>
+          <a href="#testimonials">המלצות</a>
+          <Link to="/articles">בלוג</Link>
+          <a href="#contact">יצירת קשר</a>
         </div>
 
         {/* Left side: WhatsApp + Hamburger */}
@@ -203,6 +203,17 @@ function HomePage() {
           </button>
         </div>
       </nav>
+
+      {/* Mobile menu overlay — outside <nav> to avoid backdrop-filter containing block */}
+      {menuOpen && (
+        <div className="mobile-nav-overlay" onClick={() => setMenuOpen(false)}>
+          <a href="#about" onClick={() => setMenuOpen(false)}>אודות</a>
+          <a href="#services" onClick={() => setMenuOpen(false)}>שירותים</a>
+          <a href="#testimonials" onClick={() => setMenuOpen(false)}>המלצות</a>
+          <Link to="/articles" onClick={() => setMenuOpen(false)}>בלוג</Link>
+          <a href="#contact" onClick={() => setMenuOpen(false)}>יצירת קשר</a>
+        </div>
+      )}
 
       {/* Hero */}
       <header className="hero">

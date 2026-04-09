@@ -1686,6 +1686,38 @@ h2.section-title {
   }
 }
 
+/* ─── MOBILE NAV OVERLAY ─── */
+/* Sits outside <nav> so backdrop-filter doesn't trap fixed positioning */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 64px 0 0 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  z-index: 200;
+}
+
+.mobile-nav-overlay a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1.1rem 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: color 0.15s, background 0.15s;
+}
+
+.mobile-nav-overlay a:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav-overlay a:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 @media (max-width: 700px) {
   /* Show hamburger, hide desktop links */
   .top-nav-hamburger {
@@ -1694,39 +1726,6 @@ h2.section-title {
 
   .top-nav-links {
     display: none;
-    position: fixed;
-    inset: 64px 0 0 0;
-    background: rgba(0, 0, 0, 0.97);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    z-index: 99;
-    padding: 2rem 0;
-  }
-
-  .top-nav-links.mobile-open {
-    display: flex;
-  }
-
-  .top-nav-links a {
-    font-size: 1.4rem;
-    font-weight: 700;
-    padding: 1rem 2rem;
-    letter-spacing: 0.05em;
-    width: 100%;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.85);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .top-nav-links a:last-child {
-    border-bottom: none;
-  }
-
-  .top-nav-links a:hover {
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.04);
   }
 }
 
