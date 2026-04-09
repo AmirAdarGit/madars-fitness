@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E2E8F0" />
+      <stop offset="1" stop-color="#CBD5E1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)" />
+  <rect x="120" y="190" width="560" height="620" rx="24" stroke="#94A3B8" stroke-width="8" stroke-dasharray="18 18" />
+  <circle cx="400" cy="400" r="90" fill="#94A3B8" />
+  <path d="M230 720C275 620 338 570 400 570C462 570 525 620 570 720" stroke="#94A3B8" stroke-width="24" stroke-linecap="round" />
+  <text x="400" y="890" text-anchor="middle" fill="#334155" font-family="Arial, sans-serif" font-size="42" font-weight="700">
+    Add Trainer Image
+  </text>
+</svg>
