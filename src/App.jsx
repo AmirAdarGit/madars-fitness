@@ -1,5 +1,6 @@
 import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { articles } from './data/articles'
 import ArticlesPage from './pages/ArticlesPage'
 import ArticlePage from './pages/ArticlePage'
@@ -148,6 +149,54 @@ const galleryImages = [
 
 const placeholderImage = assetPath('images/gallery/placeholder.svg')
 
+// ── Animation variants ──────────────────────────────────────────────────────
+
+const ease = [0.22, 1, 0.36, 1]
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 48 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease } },
+}
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } },
+}
+
+const slideRight = {
+  hidden: { opacity: 0, x: 70 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.75, ease } },
+}
+
+const slideLeft = {
+  hidden: { opacity: 0, x: -70 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.75, ease } },
+}
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+}
+
+const heroStagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.18, delayChildren: 0.25 } },
+}
+
+const heroItem = {
+  hidden: { opacity: 0, y: 36 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.85, ease } },
+}
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.65, ease } },
+}
+
+const viewportOpts = { once: true, margin: '-80px' }
+
+// ── Component ───────────────────────────────────────────────────────────────
+
 function HomePage() {
   const currentYear = new Date().getFullYear()
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -157,7 +206,6 @@ function HomePage() {
 
       {/* Navigation */}
       <nav className="top-nav">
-        {/* Logo - RIGHT */}
         <a href={import.meta.env.BASE_URL} className="top-nav-logo">
           <img
             src={assetPath('images/logo.jpeg')}
@@ -170,7 +218,6 @@ function HomePage() {
           <span className="top-nav-logo-text" style={{ display: 'none' }}>MADARS FITNESS</span>
         </a>
 
-        {/* Links - CENTER (desktop only) */}
         <div className="top-nav-links">
           <a href="#about">אודות</a>
           <a href="#services">שירותים</a>
@@ -179,7 +226,6 @@ function HomePage() {
           <a href="#contact">יצירת קשר</a>
         </div>
 
-        {/* Left side: WhatsApp + Hamburger */}
         <div className="top-nav-left-group">
           <a
             href={`https://wa.me/${whatsappNumber}`}
@@ -204,64 +250,112 @@ function HomePage() {
         </div>
       </nav>
 
-      {/* Mobile menu overlay — outside <nav> to avoid backdrop-filter containing block */}
-      {menuOpen && (
-        <div className="mobile-nav-overlay" onClick={() => setMenuOpen(false)}>
-          <a href="#about" onClick={() => setMenuOpen(false)}>אודות</a>
-          <a href="#services" onClick={() => setMenuOpen(false)}>שירותים</a>
-          <a href="#testimonials" onClick={() => setMenuOpen(false)}>המלצות</a>
-          <Link to="/articles" onClick={() => setMenuOpen(false)}>בלוג</Link>
-          <a href="#contact" onClick={() => setMenuOpen(false)}>יצירת קשר</a>
-        </div>
-      )}
+      {/* Mobile menu overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="mobile-nav-overlay"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease }}
+          >
+            {['#about|אודות', '#services|שירותים', '#testimonials|המלצות', '/articles|בלוג', '#contact|יצירת קשר'].map((item, i) => {
+              const [href, label] = item.split('|')
+              const isRoute = href.startsWith('/')
+              return (
+                <motion.div
+                  key={href}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.06, duration: 0.3, ease }}
+                >
+                  {isRoute
+                    ? <Link to={href} onClick={() => setMenuOpen(false)}>{label}</Link>
+                    : <a href={href} onClick={() => setMenuOpen(false)}>{label}</a>
+                  }
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero */}
       <header className="hero">
-        <img
+        <motion.img
           className="hero-bg"
           src={assetPath('images/hero-main.jpeg')}
           alt="ספיר מדר - מאמנת כושר"
           onError={(e) => { e.currentTarget.src = assetPath('images/gallery/trainer-01.png') }}
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.4, ease }}
         />
         <div className="hero-overlay" />
-        <div className="hero-content">
-          <span className="hero-badge">FITNESS &amp; TRAINING</span>
-          <h1>SAPIR MADAR<br /><span className="hero-title-he">ליווי כושר ואימון אישי</span></h1>
-          <p className="hero-subtitle">
+        <motion.div
+          className="hero-content"
+          variants={heroStagger}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.span className="hero-badge" variants={heroItem}>FITNESS &amp; TRAINING</motion.span>
+          <motion.h1 variants={heroItem}>
+            SAPIR MADAR<br /><span className="hero-title-he">ליווי כושר ואימון אישי</span>
+          </motion.h1>
+          <motion.p className="hero-subtitle" variants={heroItem}>
             להשיג את הגוף שתמיד רצית,<br />בלי לוותר על עצמך בדרך!
-          </p>
-          <div className="hero-actions">
+          </motion.p>
+          <motion.div className="hero-actions" variants={heroItem}>
             <a className="btn hero-cta-pill" href="#services">
               איפה מתחילים ?
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </header>
 
       {/* Stats */}
-      <div className="stats-strip">
+      <motion.div
+        className="stats-strip"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOpts}
+      >
         <div className="stats-inner">
           {trustStats.map((item) => (
-            <div key={item.label} className="stat-item">
+            <motion.div key={item.label} className="stat-item" variants={fadeUp}>
               <span className="stat-value">{item.value}</span>
               <span className="stat-label">{item.label}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* About */}
       <section id="about" className="section">
         <div className="about-grid">
-          <div className="about-image-wrap">
+          <motion.div
+            className="about-image-wrap"
+            variants={slideRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             <img
               className="about-image"
               src={assetPath('images/gallery/trainer-02.png')}
               alt="ספיר מדר"
               onError={(e) => { e.currentTarget.src = placeholderImage }}
             />
-          </div>
-          <div className="about-text">
+          </motion.div>
+          <motion.div
+            className="about-text"
+            variants={slideLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             <span className="section-label">אודות</span>
             <div className="divider" />
             <h2 className="section-title">קצת עליי</h2>
@@ -278,47 +372,70 @@ function HomePage() {
               <li>תואר שני בחינוך גופני - מכון וינגייט</li>
               <li>ליווי אישי למתאמנים מכל הרמות</li>
             </ul>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Services */}
       <div className="section-full" id="services">
         <div className="section-inner">
-          <span className="section-label">מה אני מציעה</span>
-          <div className="divider" />
-          <h2 className="section-title">שירותים</h2>
-          <div className="services-grid">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOpts}>
+            <span className="section-label">מה אני מציעה</span>
+            <div className="divider" />
+            <h2 className="section-title">שירותים</h2>
+          </motion.div>
+          <motion.div
+            className="services-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             {services.map((service, i) => (
-              <div key={service.title} className="service-card">
+              <motion.div key={service.title} className="service-card" variants={fadeUp}>
                 <span className="service-number">0{i + 1}</span>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="topics-wrap" style={{ marginTop: '3rem' }}>
+          <motion.div
+            className="topics-wrap"
+            style={{ marginTop: '3rem' }}
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             {fitnessTopics.map((topic) => (
-              <span key={topic} className="topic-chip">{topic}</span>
+              <motion.span key={topic} className="topic-chip" variants={fadeUp}>{topic}</motion.span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Process */}
       <div className="section-dark">
         <div className="section-inner">
-          <span className="section-label">איך זה עובד</span>
-          <div className="divider" />
-          <h2 className="section-title">התהליך</h2>
-          <p className="section-desc light">
-            מהיכרות ועד תוצאות - תהליך ברור, מקצועי ומותאם אישית לנשים ולגברים.
-          </p>
-          <div className="process-grid">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOpts}>
+            <span className="section-label">איך זה עובד</span>
+            <div className="divider" />
+            <h2 className="section-title">התהליך</h2>
+            <p className="section-desc light">
+              מהיכרות ועד תוצאות - תהליך ברור, מקצועי ומותאם אישית לנשים ולגברים.
+            </p>
+          </motion.div>
+          <motion.div
+            className="process-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             {processSteps.map((step, i) => (
               <React.Fragment key={step.title}>
-                <div className="process-col">
+                <motion.div className="process-col" variants={fadeUp}>
                   <div className="process-icon-wrap">
                     {step.icon}
                   </div>
@@ -328,13 +445,13 @@ function HomePage() {
                       <p key={j}>{line}</p>
                     ))}
                   </div>
-                </div>
+                </motion.div>
                 {i < processSteps.length - 1 && (
-                  <span key={`arrow-${i}`} className="process-arrow">←</span>
+                  <motion.span key={`arrow-${i}`} className="process-arrow" variants={fadeIn}>←</motion.span>
                 )}
               </React.Fragment>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
 
@@ -342,7 +459,13 @@ function HomePage() {
       <div className="app-section">
         <div className="app-section-bg" />
         <div className="app-section-content">
-          <div className="app-text-col">
+          <motion.div
+            className="app-text-col"
+            variants={slideLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             <span className="section-label">תוכנית דיגיטלית</span>
             <div className="divider" />
             <h2 className="app-section-title">תוכנית אימון אישית<br />ישירות לטלפון שלך</h2>
@@ -352,8 +475,14 @@ function HomePage() {
             <a className="btn app-cta-btn" href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
               אני רוצה להצטרף
             </a>
-          </div>
-          <div className="phone-mockup-wrap">
+          </motion.div>
+          <motion.div
+            className="phone-mockup-wrap"
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             <div className="phone-mockup">
               <div className="phone-screen">
                 <div className="phone-ui">
@@ -397,77 +526,109 @@ function HomePage() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Testimonials */}
       <section id="testimonials" className="section">
-        <span className="section-label">מה אומרים עליי</span>
-        <div className="divider" />
-        <h2 className="section-title">המלצות</h2>
-        <div className="testimonials-grid">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOpts}>
+          <span className="section-label">מה אומרים עליי</span>
+          <div className="divider" />
+          <h2 className="section-title">המלצות</h2>
+        </motion.div>
+        <motion.div
+          className="testimonials-grid"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOpts}
+        >
           {testimonials.map((t) => (
-            <div key={t.name} className="testimonial-card">
+            <motion.div key={t.name} className="testimonial-card" variants={fadeUp}>
               <p>{t.text}</p>
               <span className="testimonial-name">{t.name}</span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Gallery */}
       <section id="gallery">
-        <div className="gallery-grid">
+        <motion.div
+          className="gallery-grid"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOpts}
+        >
           {galleryImages.map((image) => (
-            <div key={image.src} className="gallery-item">
+            <motion.div key={image.src} className="gallery-item" variants={scaleIn}>
               <img
                 src={image.src}
                 alt={image.alt}
                 loading="lazy"
                 onError={(e) => { e.currentTarget.src = placeholderImage }}
               />
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* FAQ */}
       <div className="faq-section">
         <div className="faq-section-inner">
-          <div className="faq-header">
+          <motion.div className="faq-header" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOpts}>
             <span className="section-label">יש לך שאלות?</span>
             <div className="divider" />
             <h2 className="faq-title">שאלות נפוצות</h2>
             <p className="faq-subtitle">כל מה שרצית לדעת לפני שמתחילים</p>
-          </div>
-          <div className="faq-grid">
+          </motion.div>
+          <motion.div
+            className="faq-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             {faqs.map((item, i) => (
-              <div key={item.question} className="faq-card">
+              <motion.div key={item.question} className="faq-card" variants={fadeUp}>
                 <span className="faq-num">0{i + 1}</span>
                 <h3 className="faq-q">{item.question}</h3>
                 <p className="faq-a">{item.answer}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* CTA Banner */}
-      <div className="cta-banner">
+      <motion.div
+        className="cta-banner"
+        variants={scaleIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOpts}
+      >
         <div className="cta-banner-inner">
           <h2>מוכנים להתחיל?</h2>
           <a className="btn dark" href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
             לקביעת שיחת היכרות
           </a>
         </div>
-      </div>
+      </motion.div>
 
       {/* Contact */}
       <div className="section-dark" id="contact">
         <div className="section-inner">
           <div className="contact-grid">
-            <div className="contact-info">
+            <motion.div
+              className="contact-info"
+              variants={slideRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOpts}
+            >
               <span className="section-label">יצירת קשר</span>
               <div className="divider" />
               <h2 className="section-title">בואו נדבר</h2>
@@ -481,13 +642,19 @@ function HomePage() {
                 <a href="https://www.instagram.com/madars_fitness/" target="_blank" rel="noreferrer">אינסטגרם</a>
                 <a href="https://www.facebook.com/profile.php?id=100028749852003" target="_blank" rel="noreferrer">פייסבוק</a>
               </div>
-            </div>
-            <div className="contact-cta">
+            </motion.div>
+            <motion.div
+              className="contact-cta"
+              variants={slideLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOpts}
+            >
               <p>מוכנים להתחיל תהליך מקצועי עם תוצאות אמיתיות?</p>
               <a className="btn primary" href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
                 שלחו הודעה עכשיו
               </a>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -495,27 +662,43 @@ function HomePage() {
       {/* Articles Section */}
       <div className="section-full">
         <div className="section-inner">
-          <span className="section-label">בלוג</span>
-          <div className="divider" />
-          <h2 className="section-title">מאמרים בנושא אימונים ותזונה</h2>
-          <div className="articles-home-grid">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOpts}>
+            <span className="section-label">בלוג</span>
+            <div className="divider" />
+            <h2 className="section-title">מאמרים בנושא אימונים ותזונה</h2>
+          </motion.div>
+          <motion.div
+            className="articles-home-grid"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             {articles.slice(0, 4).map((article) => (
-              <Link to={`/articles/${article.id}`} key={article.id} className="article-home-card">
-                <div className="article-home-img">
-                  <img src={article.image} alt={article.title} loading="lazy" />
-                  <span className="article-home-cat">{article.category}</span>
-                </div>
-                <div className="article-home-body">
-                  <h3>{article.title}</h3>
-                  <p>{article.excerpt}</p>
-                  <span className="article-home-read">קראו עוד ←</span>
-                </div>
-              </Link>
+              <motion.div key={article.id} variants={fadeUp}>
+                <Link to={`/articles/${article.id}`} className="article-home-card">
+                  <div className="article-home-img">
+                    <img src={article.image} alt={article.title} loading="lazy" />
+                    <span className="article-home-cat">{article.category}</span>
+                  </div>
+                  <div className="article-home-body">
+                    <h3>{article.title}</h3>
+                    <p>{article.excerpt}</p>
+                    <span className="article-home-read">קראו עוד ←</span>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          </motion.div>
+          <motion.div
+            style={{ textAlign: 'center', marginTop: '2rem' }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOpts}
+          >
             <Link to="/articles" className="btn dark">כל המאמרים</Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 

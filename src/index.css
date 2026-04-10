@@ -1700,6 +1700,7 @@ h2.section-title {
 }
 
 .mobile-nav-overlay a {
+  display: block;
   font-size: 1.5rem;
   font-weight: 700;
   padding: 1.1rem 2rem;
@@ -1709,7 +1710,7 @@ h2.section-title {
   transition: color 0.15s, background 0.15s;
 }
 
-.mobile-nav-overlay a:last-child {
+.mobile-nav-overlay > div:last-child a {
   border-bottom: none;
 }
 
